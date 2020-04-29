@@ -1,0 +1,13 @@
+tokenize-rt
+future-fstrings[rewrite]
+pycopy-cpython-uasyncio
+pycopy-cpython-ure
+pycopy-cpython-utime
+pycopy-cpython-ulogging
+pycopy-cpython-micropython
+pycopy-cpython-uerrno
+pycopy-cpython-ffi
+quart
+
+#thonny
+
