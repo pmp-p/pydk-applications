@@ -1,0 +1,11 @@
+
+ - simulator toolbars both  horiz / vert  ( play / pause / stop / rotate / edit )
+
+ - canvas AND associated widgets rotation
+
+ - some UI toolkit for python to handle DOM
+
+ - a floating/popping/sliding Xterm.js ( transparency ? )
+
+
+

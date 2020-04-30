@@ -69,6 +69,7 @@ class CodeHandler(SimpleHTTPRequestHandler):
                 HTTPStatus.NOT_FOUND,
                 "No permission to list directory")
             return None
+
         list.sort(key=lambda a: a.lower())
         r = []
         try:
@@ -84,6 +85,7 @@ class CodeHandler(SimpleHTTPRequestHandler):
         r.append(f'<title>{title}</title>\n</head>')
         r.append('<body>\n<h1>%s</h1>' % title)
         r.append('<hr>\n<ul>')
+
         for name in list:
             fullname = os.path.join(path, name)
             displayname = linkname = name
@@ -124,8 +126,9 @@ class CodeHandler(SimpleHTTPRequestHandler):
             return self.do_GET_menu(path)
 
         elif realpath.endswith('/') and realpath.count('.')>1 and realpath.count('/')==2:
-            log_v(f'redirect {path}')
-            path = f'./pythons/app.html'
+            appname = path.rsplit('/')[-2]
+            log_v(f"redirect {path} -> {appname}")
+            path = f'{appname}/app/src/main/res/layout/activity_main.html'
         else:
             for redir in ('wasm','data','js'):
                 if path.endswith(f'/python.{redir}'):

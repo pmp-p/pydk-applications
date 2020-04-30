@@ -45,7 +45,7 @@ then
     echo " skipping pip update"
     shift 1
 else
-    $PIP install $PIPU --upgrade pip cookiecutter
+    $PIP install $PIPU --upgrade pip cookiecutter remi
 
     if $AOSP
     then
