@@ -4,18 +4,30 @@ export PYDK=${PYDK:-/data/cross/pydk}
 APK=${1:-org.beerware.wapy}
 PYDK_ABI=${PYDK_ABI:-aosp-38}
 
-
 export ANDROID_HOME=${ANDROID_HOME:-$PYDK/android-sdk}
 ADB=$ANDROID_HOME/platform-tools/adb
 
-echo $ADB
 
 
+if [ -f wasm3/LICENSE ]
+then
+    echo found wasm3
+else
+    git clone https://github.com/wasm3/wasm3.git
+fi
+
+if -f "$ADB" ]
+then
+    echo found android-sdk
+else
+    echo please set ANDROID_HOME or put android-sdk there: $PYDK/android-sdk
+fi
 
 
 
 echo "
     Target : '$APK'
+    PYDK : $PYDK
     PYDK_ABI : $PYDK_ABI
 
 ANDROID_HOME=$ANDROID_HOME
@@ -25,6 +37,7 @@ $ADB
 press <enter> to continue
 "
 read
+
 
 
 

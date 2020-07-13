@@ -1,5 +1,6 @@
+#define STATIC static
 
-static PyObject *mod_embed_step(PyObject *self, PyObject *args) {
+STATIC PyObject *mod_embed_step(PyObject *self, PyObject *args) {
 /*    char *logstr = NULL;
     if (!PyArg_ParseTuple(args, "s", &logstr)) {
         return NULL;
@@ -11,7 +12,7 @@ static PyObject *mod_embed_step(PyObject *self, PyObject *args) {
 }
 
 
-static PyObject *mod_embed_log(PyObject *self, PyObject *args) {
+STATIC PyObject *mod_embed_log(PyObject *self, PyObject *args) {
     char *logstr = NULL;
     if (!PyArg_ParseTuple(args, "s", &logstr)) {
         return NULL;
@@ -20,7 +21,7 @@ static PyObject *mod_embed_log(PyObject *self, PyObject *args) {
     Py_RETURN_NONE;
 }
 
-static PyObject *mod_embed_cout(PyObject *self, PyObject *args) {
+STATIC PyObject *mod_embed_cout(PyObject *self, PyObject *args) {
     char *logstr = NULL;
     if (!PyArg_ParseTuple(args, "s", &logstr)) {
         return NULL;
@@ -38,7 +39,7 @@ static PyObject *mod_embed_cout(PyObject *self, PyObject *args) {
 }
 
 
-static PyObject *mod_embed_run(PyObject *self, PyObject *args) {
+STATIC PyObject *mod_embed_run(PyObject *self, PyObject *args) {
     char *runstr = NULL;
     if (!PyArg_ParseTuple(args, "s", &runstr)) {
         return NULL;
@@ -53,7 +54,7 @@ static PyObject *mod_embed_run(PyObject *self, PyObject *args) {
 }
 
 
-static PyMethodDef mod_embed_methods[] = {
+STATIC PyMethodDef mod_embed_methods[] = {
     {"step", mod_embed_step, METH_VARARGS, "step on android platform"},
     {"log", mod_embed_log, METH_VARARGS, "Log on android platform"},
     {"cout", mod_embed_cout, METH_VARARGS, "out text to console"},
@@ -61,7 +62,7 @@ static PyMethodDef mod_embed_methods[] = {
     {NULL, NULL, 0, NULL}
 };
 
-static PyModuleDef mod_embed = {
+STATIC PyModuleDef mod_embed = {
     PyModuleDef_HEAD_INIT,
     "embed",
     NULL,
@@ -72,3 +73,6 @@ static PyModuleDef mod_embed = {
 PyMODINIT_FUNC init_embed(void) {
     return PyModule_Create(&mod_embed);
 }
+
+#undef STATIC
+
