@@ -16,9 +16,13 @@ Since not everybody runs a webserver, a small Python3.7+ utility is provided to 
 It shows a web menu to let you pick up samples and try them.~~ currently reworked.
 
 
-example:
+example (with device):
 
 PYDK_ABI=wapy PYDK=$(pwd)/pydk ./build.sh org.beerware.wapy
+
+example (without device):
+
+ANDROID_HOME=/home/someone/studio/android-sdk DEVICE=false PYDK_ABI=wapy PYDK=$(pwd)/pydk ./build.sh org.beerware.wapy
 
 
 available ABI:

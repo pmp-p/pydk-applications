@@ -93,7 +93,7 @@ $PIP install $PIPU future-fstrings[rewrite]
 
 if $AOSP
 then
-    $PIP install $PIPU cmake==3.10.3
+    $PIP install $PIPU scikit-build cmake==3.10.3
 fi
 
 
@@ -152,12 +152,17 @@ function install_run
     fi
 }
 
-if cd ${APK} && ../make.sh installDebug
+if cd ${APK}
 then
-    APK_FILE=$(find .|grep "\.apk$")
-    install_run $APK_FILE
+    if ../make.sh installDebug
+    then
+        APK_FILE=$(find .|grep "\.apk$")
+        install_run $APK_FILE
+    else
+        echo 'android/sdk/ndk/gradle failure'
+    fi
 else
-    echo 'failure'
+    echo 'pydk-applications failure'
 fi
 
 
