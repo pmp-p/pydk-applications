@@ -5,7 +5,18 @@ APK=${1:-org.beerware.wapy}
 PYDK_ABI=${PYDK_ABI:-aosp-38}
 
 export ANDROID_HOME=${ANDROID_HOME:-$PYDK/android-sdk}
-ADB=$ANDROID_HOME/platform-tools/adb
+
+export DEVICE=${DEVICE:-true}
+
+if $DEVICE
+then
+    ADB=$ANDROID_HOME/platform-tools/adb
+else
+    ADB=true
+fi
+
+export NDK_HOME=${NDK_HOME:-${ANDROID_HOME}/ndk-bundle}
+
 
 
 
@@ -20,7 +31,7 @@ if [ -f "$ADB" ]
 then
     echo found android-sdk
 
-    if [ -f ${ANDROID_HOME}/ndk-bundle/source.properties ]
+    if [ -f ${NDK_HOME}/source.properties ]
     then
         echo Ndk found
         export AOSP=true
