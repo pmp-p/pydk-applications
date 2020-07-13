@@ -16,13 +16,14 @@ else
     git clone https://github.com/wasm3/wasm3.git
 fi
 
-if -f "$ADB" ]
+if [ -f "$ADB" ]
 then
     echo found android-sdk
+    export AOSP=true
 else
     echo please set ANDROID_HOME or put android-sdk there: $PYDK/android-sdk
+    export AOSP=false
 fi
-
 
 
 echo "
@@ -53,7 +54,7 @@ then
     echo HOST=$HOST
 
     PYTHON=$(echo -n ${HOST}/bin/python3.?)
-    PIP=$(echo -n ${HOST}/bin/pip3.?)
+    export PIP=$(echo -n ${HOST}/bin/pip3.?)
     export LD_LIBRARY_PATH="${HOST}/lib64:${HOST}/lib:$LD_LIBRARY_PATH"
     export PIPU=""
 else
@@ -69,6 +70,14 @@ export PYSET=true
 
 cd "${WD}"
 
+$PIP install $PIPU --upgrade pip
+$PIP install $PIPU future-fstrings[rewrite]
+
+if $AOSP
+then
+    $PIP install $PIPU cmake==3.10.3
+fi
+
 
 
 APK_FILE=$(find $APK/|grep "\.apk$")
@@ -81,12 +90,8 @@ $ADB uninstall $APK
 cd /data/cross/pydk-applications && rm -rf ${APK}
 
 # auto answer [enter]
-TEMPLATE=$(pwd)/wapy-android ./template.sh ${APK} <<END
+TEMPLATE=${TEMPLATE:-$(pwd)/wapy-android} ./template.sh ${APK}
 
-
-
-
-END
 
 
 mkdir -p ${APK}/prebuilt/

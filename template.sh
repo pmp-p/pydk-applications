@@ -11,7 +11,7 @@ then
     echo HOST=$HOST
 
     PYTHON=$(echo -n ${HOST}/bin/python3.?)
-    PIP=$(echo -n ${HOST}/bin/pip3.?)
+    export PIP=$(echo -n ${HOST}/bin/pip3.?)
     export LD_LIBRARY_PATH="${HOST}/lib64:${HOST}/lib:$LD_LIBRARY_PATH"
     export PIPU=""
 else
@@ -32,9 +32,15 @@ echo PATH=$(dirname $PYTHON)
 echo PYTHON=$PYTHON
 echo PIP=$PIP
 
+if $PYSET
+then
+    echo
+else
+    $PIP install $PIPU --upgrade pip
+fi
 
-$PIP install $PIPU --upgrade pip
 $PIP install $PIPU cookiecutter
+
 
 export COOKIECUTTER_CONFIG=cookiecutter.config
 mkdir -p templates replay
