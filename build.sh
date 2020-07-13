@@ -19,7 +19,14 @@ fi
 if [ -f "$ADB" ]
 then
     echo found android-sdk
-    export AOSP=true
+
+    if [ -f ${ANDROID_HOME}/ndk-bundle/source.properties ]
+    then
+        echo Ndk found
+        export AOSP=true
+    else
+        echo no ndk found maybe trigger its install with the "hello jni sample"
+    fi
 else
     echo please set ANDROID_HOME or put android-sdk there: $PYDK/android-sdk
     export AOSP=false
