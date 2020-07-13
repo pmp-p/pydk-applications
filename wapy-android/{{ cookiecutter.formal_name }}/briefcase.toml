@@ -1,0 +1,18 @@
+[paths]
+app_path = "app/src/main/assets/python/app"
+app_packages_path = "app/src/main/assets/python/app_packages"
+support_path = "app"
+
+icon.round.48 = "app/src/main/res/mipmap-mdpi/ic_launcher_round.png"
+icon.round.72 = "app/src/main/res/mipmap-hdpi/ic_launcher_round.png"
+icon.round.96 = "app/src/main/res/mipmap-xhdpi/ic_launcher_round.png"
+icon.round.144 = "app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png"
+icon.round.192 = "app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png"
+
+icon.square.48 = "app/src/main/res/mipmap-mdpi/ic_launcher.png"
+icon.square.72 = "app/src/main/res/mipmap-hdpi/ic_launcher.png"
+icon.square.96 = "app/src/main/res/mipmap-xhdpi/ic_launcher.png"
+icon.square.144 = "app/src/main/res/mipmap-xxhdpi/ic_launcher.png"
+icon.square.192 = "app/src/main/res/mipmap-xxxhdpi/ic_launcher.png"
+
+# splash.750x1334 = "app/src/main/res/.../launch-750x1334.png"

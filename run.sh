@@ -17,9 +17,8 @@ then
     echo no pip
     shift 1
 else
-    $PIP install --user -r pythons/requirements.txt
+    $PIP install --user -r $PYDK/sources.py/pythons/requirements.txt
 fi
 
-
-PYTHONPATH=. $PYTHON -u -B -i -m pythons.js "$@"
+PYTHONPATH=$PYDK/sources.py/pythons $PYTHON -u -B -i -m pythons.js "$@"
 

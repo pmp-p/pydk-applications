@@ -1,0 +1,14 @@
+{
+  "module_name": "wapy",
+  "bundle": "org.beerware",
+  "app_name": "EmptyWappyApp",
+  "formal_name": "org.beerware.wapy",
+  "_copy_without_render": [
+    "gradlew",
+    "gradle.bat",
+    "gradle/wrapper/gradle-wrapper.properties",
+    "gradle/wrapper/gradle-wrapper.jar",
+    ".gitignore",
+    "*.png"
+  ]
+}
