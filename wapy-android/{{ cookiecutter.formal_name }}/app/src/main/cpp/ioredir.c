@@ -136,6 +136,9 @@ void do_flush_stdout(){
         // always put a terminal zero.
         *cout = 0;
         LOG(LOG_TAG, cstr);
+
+        // mark buffer ready for other IO use
+        cstr[0] = 0;
     }
 }
 

@@ -481,7 +481,7 @@ MainActivity extends AppCompatActivity implements View.OnClickListener
             android.util.Log.i(MainActivity.TAG, "Events java->python");
 
             while ( appq.size()>0 ) {
-                PyRun("python3.dispatch("+appq.remove(0)+")");
+                PyRun("pythons.dispatch("+appq.remove(0)+")");
             }
         }
 

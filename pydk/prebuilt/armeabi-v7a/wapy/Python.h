@@ -1,5 +1,6 @@
 #ifndef PYTHON_H
 
+#define __WAPY__ (1)
 
 
 // cpython mock

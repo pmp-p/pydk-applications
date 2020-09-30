@@ -6,19 +6,36 @@ PYDK_ABI=${PYDK_ABI:-aosp-38}
 
 export ANDROID_HOME=${ANDROID_HOME:-$PYDK/android-sdk}
 
-export DEVICE=${DEVICE:-true}
-
-if $DEVICE
-then
-    ADB=$ANDROID_HOME/platform-tools/adb
-else
-    ADB=true
-fi
-
+# probably would not work from elsewhere
 export NDK_HOME=${NDK_HOME:-${ANDROID_HOME}/ndk-bundle}
 
 
+# will we use a test device for generated apk
 
+export DEVICE=${DEVICE:-true}
+
+
+ADB=$ANDROID_HOME/platform-tools/adb
+
+if echo "dev$DEVICE" |grep -q "false"
+then
+    ADB=true
+else
+    if $ADB devices -l|grep 'product:'
+    then
+        echo "at least one device found, will use adb"
+        echo "#TODO: handle multi devices with -s"
+        #ADB="$ADB -s $DEVICE"
+    else
+        echo "no device '$DEVICE' found won't deploy with adb"
+        ADB=true
+    fi
+fi
+
+export ADB
+
+
+# check for wasm3 even if not used atm
 
 if [ -f wasm3/LICENSE ]
 then
@@ -44,21 +61,7 @@ else
 fi
 
 
-echo "
-    Target : '$APK'
-    PYDK : $PYDK
-    PYDK_ABI : $PYDK_ABI
-
-ANDROID_HOME=$ANDROID_HOME
-
-$ADB
-
-press <enter> to continue
-"
-read
-
-
-
+# select a python+pip combo ( cmake, cookiecutter and f-strings support depend on that )
 
 WD=$(pwd)
 
@@ -72,19 +75,42 @@ then
     echo HOST=$HOST
 
     PYTHON=$(echo -n ${HOST}/bin/python3.?)
-    export PIP=$(echo -n ${HOST}/bin/pip3.?)
+    export PIP="$PYTHON -u -B -m pip"
     export LD_LIBRARY_PATH="${HOST}/lib64:${HOST}/lib:$LD_LIBRARY_PATH"
     export PIPU=""
 else
     echo " * Using non PyDK-sdk cPython3"
     export PYTHON=$(command -v python3)
-    export PIP=$(command -v pip3)
+    export PIP="$PYTHON -u -B -m pip"
     export PIPU="--user"
     export PATH=~/.local/bin:$PATH
 
 fi
 
 export PYSET=true
+
+
+
+# last chance to get off the train
+
+echo "
+    Target : '$APK'
+    PYDK : $PYDK
+    PYDK_ABI : $PYDK_ABI
+
+ANDROID_HOME=$ANDROID_HOME
+NDK_HOME=$NDK_HOME
+
+$ADB
+
+press <enter> to continue
+"
+read
+
+
+
+
+
 
 cd "${WD}"
 
@@ -97,7 +123,6 @@ then
 fi
 
 
-
 APK_FILE=$(find $APK/|grep "\.apk$")
 
 
@@ -108,8 +133,12 @@ $ADB uninstall $APK
 cd /data/cross/pydk-applications && rm -rf ${APK}
 
 # auto answer [enter]
-TEMPLATE=${TEMPLATE:-$(pwd)/wapy-android} ./template.sh ${APK}
+TEMPLATE=${TEMPLATE:-$(pwd)/wapy-android} ./template.sh ${APK} <<END
 
+
+
+
+END
 
 
 mkdir -p ${APK}/prebuilt/
@@ -126,7 +155,6 @@ done
 
 $MERGE ${PYDK}/projects/pydk-all/* ${APK}/assets/
 $MERGE src/${APK}/* ${APK}/assets/
-
 
 
 function install_run

@@ -532,15 +532,25 @@ _catch: {
 }
 #undef VMX
 
+
 JNIEXPORT jstring JNICALL
 Java_{{ cookiecutter.bundle|replace('.', '_') }}_{{ cookiecutter.module_name }}_MainActivity_PyRun(JNIEnv *env, jobject instance, jstring jstring_code) {
-    if (stdout_redir_enabled)
-        do_stdout_redir();
+
+//    if (stdout_redir_enabled)
+  //      do_stdout_redir();
+
     const char *code = (*env)->GetStringUTFChars( env, jstring_code , NULL );
     PyRun_SimpleString(code);
     (*env)->ReleaseStringUTFChars(env,jstring_code, code);
     return (*env)->NewStringUTF(env, cstr);
 }
+
+#define PY(...) { \
+    snprintf(cstr, sizeof(cstr), __VA_ARGS__ ); \
+    LOG_V("%s", cstr); \
+    PyRun_SimpleString(cstr); \
+}
+
 
 /*
  * Main working thread function. From a pthread,
@@ -577,11 +587,17 @@ VMthread(void* context) {
         Py_Initialize();
         LOG_V("/Initializing Python ... ");
 
-        /* ensure threads will work. */
-        LOG_V("Initializing Python threads ...");
-        PyEval_InitThreads();
-        LOG_V("/Initializing Python threads ...");
 
+        #if __WAPY__
+            LOG_V("Initializing Wapy IO Zone ...");
+            PY("import embed; embed.set_io_buffer(%p, %zu);import wapy_aosp_site\n", &cstr[0], IO_MAX);
+            LOG_V("/Initializing Wapy IO Zone ...");
+        #else
+            /* ensure threads will work. */
+            LOG_V("Initializing Python threads ...");
+            PyEval_InitThreads();
+            LOG_V("/Initializing Python threads ...");
+        #endif
         PY_Initialized = 1;
 
         //PyRun_SimpleString("import pythons");
@@ -634,8 +650,8 @@ VMthread(void* context) {
         if (pctx->done) {
             pctx->done = 0;
         }
-
-        do_flush_stdout();
+        if (!cstr[0])
+            do_flush_stdout();
 
         pthread_mutex_unlock(&pctx->lock);
         //LOG_V("VMthread lock release");
@@ -655,10 +671,9 @@ VMthread(void* context) {
             //Java_{{ cookiecutter.bundle|replace('.', '_') }}_{{ cookiecutter.module_name }}_MainActivity_PyLoop
         }
 
-        PyRun_SimpleString("print(1)");
+        //PyRun_SimpleString("embed.run('[]')");
         //PyRun_SimpleString("python3.on_step(Applications,python3)");
-
-        //(*env)->CallVoidMethod(env, pctx->mainActivityObj, timerId);
+        //        (*env)->CallVoidMethod(env, pctx->mainActivityObj, timerId);
 
 
 
